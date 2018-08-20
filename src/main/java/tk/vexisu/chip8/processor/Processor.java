@@ -1,5 +1,6 @@
 package tk.vexisu.chip8.processor;
 
+import java.util.concurrent.ThreadLocalRandom;
 import tk.vexisu.chip8.processor.opcode.OpCode;
 import tk.vexisu.chip8.processor.opcode.Operator;
 import tk.vexisu.chip8.registers.*;
@@ -79,13 +80,24 @@ public class Processor
 			case SNEV:
 				this.snev(operator);
 				break;
-
+			case LDI:
+				this.ldi(operator);
+				break;
+			case JPV:
+				this.jpv(operator);
+				break;
+			case RND:
+				this.rnd(operator);
+				break;
+			case DRW:
+				this.drw(operator);
+				break;
 		}
 	}
 
 	private void cls()
 	{
-		System.out.println("CLS: Clean screen");
+		//Cleaning Screen will be implemented after implementing Display
 	}
 
 	private void ret()
@@ -296,6 +308,53 @@ public class Processor
 
 	private void snev(Operator operator)
 	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerYAddress = operator.getFourBits(1);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
+		if (registerXValue != registerYValue)
+		{
+			this.programCounterRegister.increment(2);
+		}
+	}
 
+	private void ldi(Operator operator)
+	{
+		var value = ((int) operator.getFourBits(2) << 8);
+		value += ((int) operator.getFourBits(1) << 4);
+		value += (int) operator.getFourBits(0);
+		this.iRegister.write(value);
+	}
+
+	private void jpv(Operator operator)
+	{
+		var jumpValue = ((int) operator.getFourBits(2) << 8);
+		jumpValue += ((int) operator.getFourBits(1) << 4);
+		jumpValue += (int) operator.getFourBits(0);
+		var v0RegisterValue = this.generalPurposeRegisters.read((short) 0x0);
+		var jumpAddress = jumpValue + v0RegisterValue;
+		this.programCounterRegister.write(jumpAddress);
+	}
+
+	private void rnd(Operator operator)
+	{
+		var registerXAdress = (operator.getFourBits(2));
+		var value = (operator.getFourBits(1) << 4);
+		value += operator.getFourBits(0);
+		var random = ThreadLocalRandom.current();
+		var randomNumber = (short) random.nextInt(0xFF);
+		var result = (short) (randomNumber & value);
+		this.generalPurposeRegisters.write(registerXAdress, result);
+	}
+
+	private void drw(Operator operator)
+	{
+		var registerXAdress = operator.getFourBits(2);
+		var registerYAdress = operator.getFourBits(1);
+		var nibble = operator.getFourBits(0);
+		var spriteAddress = this.iRegister.read();
+		var xCoordinate = this.generalPurposeRegisters.read(registerXAdress);
+		var yCoordinate = this.generalPurposeRegisters.read(registerYAdress);
+		//Drawing will be implemented after implementing Display
 	}
 }
