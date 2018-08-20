@@ -65,11 +65,21 @@ public class Processor
 				this.addv(operator);
 				break;
 			case SUB:
-				this.sub(operator);
+				this.sub(operator, false);
 				break;
 			case SHR:
 				this.shr(operator);
 				break;
+			case SUBN:
+				this.sub(operator, true);
+				break;
+			case SHL:
+				this.shl(operator);
+				break;
+			case SNEV:
+				this.snev(operator);
+				break;
+
 		}
 	}
 
@@ -217,21 +227,37 @@ public class Processor
 		this.generalPurposeRegisters.write(registerXAddress, operationResult);
 	}
 
-	private void sub(Operator operator)
+	private void sub(Operator operator, boolean n)
 	{
 		var registerXAddress = operator.getFourBits(2);
 		var registerYAddress = operator.getFourBits(1);
 		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
 		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
-		if (registerXValue > registerYValue)
+		short operationResult;
+		if (n)
 		{
-			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
+			if (registerYValue > registerXValue)
+			{
+				this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
+			}
+			else
+			{
+				this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
+			}
+			operationResult = (short) (registerYValue - registerXValue);
 		}
 		else
 		{
-			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
+			if (registerXValue > registerYValue)
+			{
+				this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
+			}
+			else
+			{
+				this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
+			}
+			operationResult = (short) (registerXValue - registerYValue);
 		}
-		var operationResult = (short) (registerXValue - registerYValue);
 		operationResult = (short) ~((~operationResult) | ~(0xFF));
 		this.generalPurposeRegisters.write(registerXAddress, operationResult);
 	}
@@ -252,5 +278,24 @@ public class Processor
 		this.generalPurposeRegisters.write(registerXAddress, operationResult);
 	}
 
+	private void shl(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		if (~((~registerXValue) | ~(0b0)) == 0b1)
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
+		}
+		else
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
+		}
+		var operationResult = (short) (registerXValue * 2);
+		this.generalPurposeRegisters.write(registerXAddress, operationResult);
+	}
 
+	private void snev(Operator operator)
+	{
+
+	}
 }

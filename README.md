@@ -1,5 +1,5 @@
 # chip8-emulator
-Emulator for programs written in CHIP-8 language.
+Emulator for CHIP-8 programs written in Java.
 ## Todo
 - [x] Registers
 - [x] Memory
