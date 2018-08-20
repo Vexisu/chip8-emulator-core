@@ -52,6 +52,24 @@ public class Processor
 			case LDV:
 				this.ldv(operator);
 				break;
+			case OR:
+				this.or(operator);
+				break;
+			case AND:
+				this.and(operator);
+				break;
+			case XOR:
+				this.xor(operator);
+				break;
+			case ADDV:
+				this.addv(operator);
+				break;
+			case SUB:
+				this.sub(operator);
+				break;
+			case SHR:
+				this.shr(operator);
+				break;
 		}
 	}
 
@@ -149,5 +167,90 @@ public class Processor
 		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
 		this.generalPurposeRegisters.write(registerXAddress, registerYValue);
 	}
+
+	private void or(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerYAddress = operator.getFourBits(1);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
+		var operationResult = (short) (registerXValue | registerYValue);
+		this.generalPurposeRegisters.write(registerXAddress, operationResult);
+	}
+
+	private void and(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerYAddress = operator.getFourBits(1);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
+		var operationResult = (short) (registerXValue & registerYValue);
+		this.generalPurposeRegisters.write(registerXAddress, operationResult);
+	}
+
+	private void xor(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerYAddress = operator.getFourBits(1);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
+		var operationResult = (short) (registerXValue ^ registerYValue);
+		this.generalPurposeRegisters.write(registerXAddress, operationResult);
+	}
+
+	private void addv(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerYAddress = operator.getFourBits(1);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
+		var operationResult = (short) (registerXValue + registerYValue);
+		if (operationResult >= 0x100)
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
+		}
+		else
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
+		}
+		operationResult = (short) ~((~operationResult) | ~(0xFF));
+		this.generalPurposeRegisters.write(registerXAddress, operationResult);
+	}
+
+	private void sub(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerYAddress = operator.getFourBits(1);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var registerYValue = this.generalPurposeRegisters.read(registerYAddress);
+		if (registerXValue > registerYValue)
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
+		}
+		else
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
+		}
+		var operationResult = (short) (registerXValue - registerYValue);
+		operationResult = (short) ~((~operationResult) | ~(0xFF));
+		this.generalPurposeRegisters.write(registerXAddress, operationResult);
+	}
+
+	private void shr(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		if (~((~registerXValue) | ~(0b0)) == 0b1)
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
+		}
+		else
+		{
+			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
+		}
+		var operationResult = (short) (registerXValue / 2);
+		this.generalPurposeRegisters.write(registerXAddress, operationResult);
+	}
+
 
 }
