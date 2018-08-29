@@ -92,6 +92,12 @@ public class Processor
 			case DRW:
 				this.drw(operator);
 				break;
+			case SKP:
+				this.skp(operator);
+				break;
+			case SKNP:
+				this.sknp(operator);
+				break;
 		}
 	}
 
@@ -356,5 +362,25 @@ public class Processor
 		var xCoordinate = this.generalPurposeRegisters.read(registerXAdress);
 		var yCoordinate = this.generalPurposeRegisters.read(registerYAdress);
 		//Drawing will be implemented after implementing Display
+	}
+
+	private void skp(Operator operator)
+	{
+		//Will be implemented with Input
+		var registerXAdress = operator.getFourBits(2);
+		if (false)
+		{
+			this.programCounterRegister.increment(2);
+		}
+	}
+
+	private void sknp(Operator operator)
+	{
+		//Will be implemented with Input
+		var registerXAdress = operator.getFourBits(2);
+		if (false)
+		{
+			this.programCounterRegister.increment(2);
+		}
 	}
 }
