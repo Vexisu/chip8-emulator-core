@@ -1,15 +1,15 @@
-package tk.vexisu.chip8.registers;
+package tk.vexisu.chip8.registers.impl;
 
-public class ProgramCounterRegister
+public class StackPointerRegister
 {
-	private int data = 0x0;
+	private byte data = 0x0;
 
-	public int read()
+	public byte read()
 	{
 		return data;
 	}
 
-	public void write(int data)
+	public void write(byte data)
 	{
 		this.data = data;
 	}

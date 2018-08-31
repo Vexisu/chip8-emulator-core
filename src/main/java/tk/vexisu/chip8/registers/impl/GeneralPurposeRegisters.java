@@ -1,4 +1,4 @@
-package tk.vexisu.chip8.registers;
+package tk.vexisu.chip8.registers.impl;
 
 public class GeneralPurposeRegisters
 {
