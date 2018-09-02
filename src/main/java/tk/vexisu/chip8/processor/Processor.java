@@ -91,6 +91,16 @@ public class Processor
 			case DRW:
 				this.graphics.drw(operator);
 				break;
+			case SKP:
+				this.flowControls.skp(operator);
+				break;
+			case SKNP:
+				this.flowControls.sknp(operator);
+				break;
+			case LDVT:
+				this.flowControls.ldvt(operator);
+				break;
+
 		}
 	}
 }

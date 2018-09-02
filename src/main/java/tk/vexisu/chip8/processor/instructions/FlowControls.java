@@ -89,4 +89,20 @@ public class FlowControls
 		var jumpAddress = jumpValue + v0RegisterValue;
 		this.programCounterRegister.write(jumpAddress);
 	}
+
+	public void skp(Operator operator)
+	{
+		var keyPressed = (int) operator.getFourBits(2);
+	}
+
+	public void sknp(Operator operator)
+	{
+		var keyPressed = (int) operator.getFourBits(2);
+	}
+
+	public void ldvt(Operator operator)
+	{
+		var value = operator.getFourBits(2);
+		this.timerRegisters.write((byte) 0x0, value);
+	}
 }
