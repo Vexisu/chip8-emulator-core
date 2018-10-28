@@ -10,10 +10,10 @@ import tk.vexisu.chip8.registers.Registers;
 
 public class Processor
 {
-	private Registers    registers    = new Registers();
-	private Arithmetics  arithmetics  = new Arithmetics(registers);
-	private Logics       logics       = new Logics(registers);
-	private Graphics     graphics     = new Graphics(registers);
+	private Registers registers = new Registers();
+	private Arithmetics arithmetics = new Arithmetics(registers);
+	private Logics logics = new Logics(registers);
+	private Graphics graphics = new Graphics(registers);
 	private FlowControls flowControls = new FlowControls(registers);
 
 	public void processInstruction(Operator operator)
