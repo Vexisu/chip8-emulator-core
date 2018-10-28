@@ -10,11 +10,11 @@ import tk.vexisu.chip8.registers.impl.TimerRegisters;
 public class Registers
 {
 	private GeneralPurposeRegisters generalPurposeRegisters = new GeneralPurposeRegisters();
-	private IRegister iRegister = new IRegister();
-	private ProgramCounterRegister programCounterRegister = new ProgramCounterRegister();
-	private StackPointerRegister stackPointerRegister = new StackPointerRegister();
-	private StackRegisters stackRegisters = new StackRegisters();
-	private TimerRegisters timerRegisters = new TimerRegisters();
+	private IRegister               iRegister               = new IRegister();
+	private ProgramCounterRegister  programCounterRegister  = new ProgramCounterRegister();
+	private StackPointerRegister    stackPointerRegister    = new StackPointerRegister();
+	private StackRegisters          stackRegisters          = new StackRegisters();
+	private TimerRegisters          timerRegisters          = new TimerRegisters();
 
 	public void tick()
 	{

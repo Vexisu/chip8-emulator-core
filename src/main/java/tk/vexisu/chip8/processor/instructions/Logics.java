@@ -11,13 +11,12 @@ import tk.vexisu.chip8.registers.impl.TimerRegisters;
 
 public class Logics
 {
-
 	private GeneralPurposeRegisters generalPurposeRegisters;
-	private IRegister iRegister;
-	private ProgramCounterRegister programCounterRegister;
-	private StackPointerRegister stackPointerRegister;
-	private StackRegisters stackRegisters;
-	private TimerRegisters timerRegisters;
+	private IRegister               iRegister;
+	private ProgramCounterRegister  programCounterRegister;
+	private StackPointerRegister    stackPointerRegister;
+	private StackRegisters          stackRegisters;
+	private TimerRegisters          timerRegisters;
 
 	public Logics(Registers registers)
 	{

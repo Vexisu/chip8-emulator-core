@@ -13,11 +13,11 @@ import tk.vexisu.chip8.registers.impl.TimerRegisters;
 public class Arithmetics
 {
 	private GeneralPurposeRegisters generalPurposeRegisters;
-	private IRegister iRegister;
-	private ProgramCounterRegister programCounterRegister;
-	private StackPointerRegister stackPointerRegister;
-	private StackRegisters stackRegisters;
-	private TimerRegisters timerRegisters;
+	private IRegister               iRegister;
+	private ProgramCounterRegister  programCounterRegister;
+	private StackPointerRegister    stackPointerRegister;
+	private StackRegisters          stackRegisters;
+	private TimerRegisters          timerRegisters;
 
 	public Arithmetics(Registers registers)
 	{
@@ -49,8 +49,7 @@ public class Arithmetics
 		if (operationResult >= 0x100)
 		{
 			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
-		}
-		else
+		} else
 		{
 			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
 		}
@@ -70,20 +69,17 @@ public class Arithmetics
 			if (registerYValue > registerXValue)
 			{
 				this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
-			}
-			else
+			} else
 			{
 				this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
 			}
 			operationResult = (short) (registerYValue - registerXValue);
-		}
-		else
+		} else
 		{
 			if (registerXValue > registerYValue)
 			{
 				this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
-			}
-			else
+			} else
 			{
 				this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
 			}
@@ -100,8 +96,7 @@ public class Arithmetics
 		if (~((~registerXValue) | ~(0b0)) == 0b1)
 		{
 			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
-		}
-		else
+		} else
 		{
 			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
 		}
@@ -116,8 +111,7 @@ public class Arithmetics
 		if (~((~registerXValue) | ~(0b0)) == 0b1)
 		{
 			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
-		}
-		else
+		} else
 		{
 			this.generalPurposeRegisters.write((short) 0xf, (short) 0x0);
 		}
