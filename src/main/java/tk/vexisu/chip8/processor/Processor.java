@@ -1,6 +1,5 @@
 package tk.vexisu.chip8.processor;
 
-import java.util.concurrent.ThreadLocalRandom;
 import tk.vexisu.chip8.processor.instructions.Arithmetics;
 import tk.vexisu.chip8.processor.instructions.FlowControls;
 import tk.vexisu.chip8.processor.instructions.Graphics;
