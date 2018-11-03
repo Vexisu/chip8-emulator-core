@@ -105,4 +105,32 @@ public class FlowControls
 		var value = operator.getFourBits(2);
 		this.timerRegisters.write((byte) 0x0, value);
 	}
+
+	public void ldvk(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+	}
+
+	public void lddv(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		this.timerRegisters.write((byte) 0x0, registerXValue);
+	}
+
+	public void ldsv(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		this.timerRegisters.write((byte) 0x1, registerXValue);
+	}
+
+	public void addi(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var iValue = this.iRegister.read();
+		var additionValue = registerXValue + iValue;
+		this.iRegister.write(additionValue);
+	}
 }

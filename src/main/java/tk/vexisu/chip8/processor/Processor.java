@@ -98,6 +98,18 @@ public class Processor
 			case LDVT:
 				this.flowControls.ldvt(operator);
 				break;
+			case LDVK:
+				this.flowControls.ldvk(operator);
+				break;
+			case LDDV:
+				this.flowControls.lddv(operator);
+				break;
+			case LDSV:
+				this.flowControls.ldsv(operator);
+				break;
+			case ADDI:
+				this.flowControls.addi(operator);
+				break;
 		}
 	}
 }
