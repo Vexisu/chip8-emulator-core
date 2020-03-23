@@ -1,5 +1,6 @@
 package tk.vexisu.chip8.processor;
 
+import tk.vexisu.chip8.memory.Memory;
 import tk.vexisu.chip8.processor.instructions.Arithmetics;
 import tk.vexisu.chip8.processor.instructions.FlowControls;
 import tk.vexisu.chip8.processor.instructions.Graphics;
@@ -10,11 +11,18 @@ import tk.vexisu.chip8.registers.Registers;
 
 public class Processor
 {
-	private Registers registers = new Registers();
-	private Arithmetics arithmetics = new Arithmetics(registers);
-	private Logics logics = new Logics(registers);
-	private Graphics graphics = new Graphics(registers);
-	private FlowControls flowControls = new FlowControls(registers);
+	private Arithmetics arithmetics;
+	private Logics logics;
+	private Graphics graphics;
+	private FlowControls flowControls;
+
+	public Processor(Registers registers, Memory memory)
+	{
+		this.arithmetics = new Arithmetics(registers);
+		this.logics = new Logics(registers);
+		this.graphics = new Graphics(registers);
+		this.flowControls = new FlowControls(registers, memory);
+	}
 
 	public void processInstruction(Operator operator)
 	{
@@ -108,7 +116,7 @@ public class Processor
 				this.flowControls.ldsv(operator);
 				break;
 			case ADDI:
-				this.flowControls.addi(operator);
+				this.arithmetics.addi(operator);
 				break;
 		}
 	}

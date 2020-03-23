@@ -36,7 +36,7 @@ public enum OpCode
 	LDFV(0xF029),
 	LDBV(0xF033),
 	LDIV(0xF055),
-	LFVI(0xF065);
+	LDVI(0xF065);
 	private int code;
 
 	OpCode(int code)
