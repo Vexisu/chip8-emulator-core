@@ -1,5 +1,6 @@
 package tk.vexisu.chip8.processor.instructions;
 
+import tk.vexisu.chip8.memory.Memory;
 import tk.vexisu.chip8.processor.opcode.Operator;
 import tk.vexisu.chip8.registers.Registers;
 import tk.vexisu.chip8.registers.impl.GeneralPurposeRegisters;
@@ -17,8 +18,9 @@ public class FlowControls
 	private StackPointerRegister stackPointerRegister;
 	private StackRegisters stackRegisters;
 	private TimerRegisters timerRegisters;
+	private Memory memory;
 
-	public FlowControls(Registers registers)
+	public FlowControls(Registers registers, Memory memory)
 	{
 		this.generalPurposeRegisters = registers.getGeneralPurposeRegisters();
 		this.iRegister = registers.getIRegister();
@@ -26,6 +28,7 @@ public class FlowControls
 		this.stackPointerRegister = registers.getStackPointerRegister();
 		this.stackRegisters = registers.getStackRegisters();
 		this.timerRegisters = registers.getTimerRegisters();
+		this.memory = memory;
 	}
 
 	public void ret()
@@ -130,5 +133,17 @@ public class FlowControls
 		var fontValue = operator.getFourBits(2);
 		var fontAddress = fontValue * 5;
 		this.iRegister.write(fontAddress);
+	}
+
+	public void ldbv(Operator operator)
+	{
+		var decimalValue = operator.getFourBits(2);
+		var hunderdsFromDecimal = (decimalValue / 100) % 10;
+		var tensFromDecimal = (decimalValue / 10) % 10;
+		var onesFromDecimal = decimalValue % 10;
+		var iRegisterValue = this.iRegister.read();
+		this.memory.write((short) iRegisterValue, (short) hunderdsFromDecimal);
+		this.memory.write((short) (iRegisterValue + 0x1), (short) tensFromDecimal);
+		this.memory.write((short) (iRegisterValue + 0x2), (short) onesFromDecimal);
 	}
 }
