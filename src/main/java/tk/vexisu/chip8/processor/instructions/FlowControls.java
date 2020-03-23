@@ -124,13 +124,4 @@ public class FlowControls
 		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
 		this.timerRegisters.write((byte) 0x1, registerXValue);
 	}
-
-	public void addi(Operator operator)
-	{
-		var registerXAddress = operator.getFourBits(2);
-		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
-		var iValue = this.iRegister.read();
-		var additionValue = registerXValue + iValue;
-		this.iRegister.write(additionValue);
-	}
 }

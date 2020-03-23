@@ -135,4 +135,13 @@ public class Arithmetics
 		var result = (short) (randomNumber & value);
 		this.generalPurposeRegisters.write(registerXAdress, result);
 	}
+
+	public void addi(Operator operator)
+	{
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var iValue = this.iRegister.read();
+		var additionValue = registerXValue + iValue;
+		this.iRegister.write(additionValue);
+	}
 }
