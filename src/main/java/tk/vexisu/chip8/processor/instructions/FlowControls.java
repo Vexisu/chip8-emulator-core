@@ -124,4 +124,11 @@ public class FlowControls
 		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
 		this.timerRegisters.write((byte) 0x1, registerXValue);
 	}
+
+	public void ldfv(Operator operator)
+	{
+		var fontValue = operator.getFourBits(2);
+		var fontAddress = fontValue * 5;
+		this.iRegister.write(fontAddress);
+	}
 }
