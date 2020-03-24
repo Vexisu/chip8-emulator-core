@@ -146,4 +146,28 @@ public class FlowControls
 		this.memory.write((short) (iRegisterValue + 0x1), (short) tensFromDecimal);
 		this.memory.write((short) (iRegisterValue + 0x2), (short) onesFromDecimal);
 	}
+
+	public void ldiv(Operator operator)
+	{
+		var iRegisterValue = this.iRegister.read();
+		var endingAddress = operator.getFourBits(2);
+		for (short i = 0x0; i <= endingAddress; i++)
+		{
+			var registerValue = this.generalPurposeRegisters.read(i);
+			var memoryDestinationAddress = (short) (iRegisterValue + i);
+			this.memory.write(memoryDestinationAddress, registerValue);
+		}
+	}
+
+	public void ldvi(Operator operator)
+	{
+		var iRegisterValue = this.iRegister.read();
+		var endingAddress = operator.getFourBits(2);
+		for (short i = 0x0; i <= endingAddress; i++)
+		{
+			var memorySourceAddress = (short) (iRegisterValue + i);
+			var memoryValue = this.memory.read(memorySourceAddress);
+			this.generalPurposeRegisters.write(i, memoryValue);
+		}
+	}
 }
