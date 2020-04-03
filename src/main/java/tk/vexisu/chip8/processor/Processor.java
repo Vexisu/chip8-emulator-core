@@ -1,5 +1,6 @@
 package tk.vexisu.chip8.processor;
 
+import tk.vexisu.chip8.display.Display;
 import tk.vexisu.chip8.memory.Memory;
 import tk.vexisu.chip8.processor.instructions.Arithmetics;
 import tk.vexisu.chip8.processor.instructions.FlowControls;
@@ -16,11 +17,11 @@ public class Processor
 	private Graphics graphics;
 	private FlowControls flowControls;
 
-	public Processor(Registers registers, Memory memory)
+	public Processor(Registers registers, Memory memory, Display display)
 	{
 		this.arithmetics = new Arithmetics(registers);
 		this.logics = new Logics(registers);
-		this.graphics = new Graphics(registers);
+		this.graphics = new Graphics(registers, display);
 		this.flowControls = new FlowControls(registers, memory);
 	}
 

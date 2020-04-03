@@ -1,5 +1,6 @@
 package tk.vexisu.chip8.processor.instructions;
 
+import tk.vexisu.chip8.display.Display;
 import tk.vexisu.chip8.processor.opcode.Operator;
 import tk.vexisu.chip8.registers.Registers;
 import tk.vexisu.chip8.registers.impl.GeneralPurposeRegisters;
@@ -17,8 +18,9 @@ public class Graphics
 	private StackPointerRegister stackPointerRegister;
 	private StackRegisters stackRegisters;
 	private TimerRegisters timerRegisters;
+	private Display display;
 
-	public Graphics(Registers registers)
+	public Graphics(Registers registers, Display display)
 	{
 		this.generalPurposeRegisters = registers.getGeneralPurposeRegisters();
 		this.iRegister = registers.getIRegister();
@@ -26,11 +28,12 @@ public class Graphics
 		this.stackPointerRegister = registers.getStackPointerRegister();
 		this.stackRegisters = registers.getStackRegisters();
 		this.timerRegisters = registers.getTimerRegisters();
+		this.display = display;
 	}
 
 	public void cls()
 	{
-		//Cleaning Screen will be implemented after implementing Display
+		display.clear();
 	}
 
 	public void drw(Operator operator)
