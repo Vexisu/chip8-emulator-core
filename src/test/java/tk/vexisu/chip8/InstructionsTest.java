@@ -9,6 +9,7 @@ import tk.vexisu.chip8.processor.instructions.Arithmetics;
 import tk.vexisu.chip8.processor.instructions.FlowControls;
 import tk.vexisu.chip8.processor.instructions.Graphics;
 import tk.vexisu.chip8.processor.instructions.Logics;
+import tk.vexisu.chip8.processor.opcode.Operator;
 import tk.vexisu.chip8.registers.Registers;
 
 public class InstructionsTest
@@ -58,5 +59,46 @@ public class InstructionsTest
 		this.flowControlInstructions.ret();
 		Assert.assertEquals(0x38, this.registers.getProgramCounterRegister().read());
 		Assert.assertEquals((byte) 0x1, this.registers.getStackPointerRegister().read());
+	}
+
+	@Test
+	public void jpcImplementationCheck()
+	{
+		this.registers.getProgramCounterRegister().write(0x000);
+		Operator operator = new Operator(0x13F8);
+		this.flowControlInstructions.jpc(operator);
+		Assert.assertEquals(0x3F8, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void callImplementationCheck()
+	{
+		this.registers.getStackPointerRegister().write((byte) 0x3);
+		this.registers.getProgramCounterRegister().write(0x2AB);
+		Operator operator = new Operator(0x2B1C);
+		this.flowControlInstructions.call(operator);
+		Assert.assertEquals((byte) 0x4, this.registers.getStackPointerRegister().read());
+		Assert.assertEquals(0x2AB, this.registers.getStackRegisters().read((byte) 0x4));
+		Assert.assertEquals(0xB1C, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void sebImplementationCheckForEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x5, (short) 0xCE);
+		this.registers.getProgramCounterRegister().write(0xD21E);
+		Operator operator = new Operator(0x35CE);
+		this.logicInstructions.seb(operator);
+		Assert.assertEquals(0xD220, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void sebImplementationCheckForNotEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x5, (short) 0xCB);
+		this.registers.getProgramCounterRegister().write(0xD21E);
+		Operator operator = new Operator(0x35CE);
+		this.logicInstructions.seb(operator);
+		Assert.assertEquals(0xD21E, this.registers.getProgramCounterRegister().read());
 	}
 }
