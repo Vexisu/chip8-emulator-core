@@ -101,4 +101,46 @@ public class InstructionsTest
 		this.logicInstructions.seb(operator);
 		Assert.assertEquals(0xD21E, this.registers.getProgramCounterRegister().read());
 	}
+
+	@Test
+	public void snebImplementationCheckForEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x19);
+		this.registers.getProgramCounterRegister().write(0x1F3C);
+		Operator operator = new Operator(0x4319);
+		this.logicInstructions.sneb(operator);
+		Assert.assertEquals(0x1F3C, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void snebImplementationCheckForNotEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x18);
+		this.registers.getProgramCounterRegister().write(0x1F3C);
+		Operator operator = new Operator(0x4319);
+		this.logicInstructions.sneb(operator);
+		Assert.assertEquals(0x1F3E, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void sevImplementationCheckForEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x1, (short) 0x2F);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x2F);
+		this.registers.getProgramCounterRegister().write(0xB3B3);
+		Operator operator = new Operator(0x5120);
+		this.logicInstructions.sev(operator);
+		Assert.assertEquals(0xB3B5, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void sevImplementationCheckForNotEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x1, (short) 0x2F);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x28);
+		this.registers.getProgramCounterRegister().write(0xB3B3);
+		Operator operator = new Operator(0x5120);
+		this.logicInstructions.sev(operator);
+		Assert.assertEquals(0xB3B3, this.registers.getProgramCounterRegister().read());
+	}
 }
