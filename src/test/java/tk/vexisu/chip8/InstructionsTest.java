@@ -143,4 +143,61 @@ public class InstructionsTest
 		this.logicInstructions.sev(operator);
 		Assert.assertEquals(0xB3B3, this.registers.getProgramCounterRegister().read());
 	}
+
+	@Test
+	public void ldbImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x7, (short) 0xAB);
+		Operator operator = new Operator(0x678A);
+		this.flowControlInstructions.ldb(operator);
+		Assert.assertEquals((short) 0x8A, this.registers.getGeneralPurposeRegisters().read((short) 0x7));
+	}
+
+	@Test
+	public void addbImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xC, (short) 0x15);
+		Operator operator = new Operator(0x7C4B);
+		this.arithmeticInstructions.addb(operator);
+		Assert.assertEquals((short) 0x60, this.registers.getGeneralPurposeRegisters().read((short) 0xC));
+	}
+
+	@Test
+	public void addbImplementationCheckWhenOverflowOccurs()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xC, (short) 0xE5);
+		Operator operator = new Operator(0x7CF3);
+		this.arithmeticInstructions.addb(operator);
+		Assert.assertEquals((short) 0xD8, this.registers.getGeneralPurposeRegisters().read((short) 0xC));
+	}
+
+	@Test
+	public void ldvImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x4, (short) 0x31);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x8, (short) 0xC4);
+		Operator operator = new Operator(0x8480);
+		this.flowControlInstructions.ldv(operator);
+		Assert.assertEquals((short) 0xC4, this.registers.getGeneralPurposeRegisters().read((short) 0x4));
+	}
+
+	@Test
+	public void orImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x5B);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x20);
+		Operator operator = new Operator(0x8230);
+		this.logicInstructions.or(operator);
+		Assert.assertEquals((short) 0x7B, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
+	}
+
+	@Test
+	public void andImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x7, (short) 0x54);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x9, (short) 0x3B);
+		Operator operator = new Operator(0x8792);
+		this.logicInstructions.and(operator);
+		Assert.assertEquals((short) 0x10, this.registers.getGeneralPurposeRegisters().read((short) 0x7));
+	}
 }
