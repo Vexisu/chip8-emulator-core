@@ -11,6 +11,6 @@ public class IRegister
 
 	public void write(int data)
 	{
-		this.data = data;
+		this.data = data & 0xFFFF;
 	}
 }

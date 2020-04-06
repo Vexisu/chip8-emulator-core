@@ -11,6 +11,6 @@ public class GeneralPurposeRegisters
 
 	public void write(short location, short data)
 	{
-		this.data[location] = data;
+		this.data[location] = (short) (data & 0xFF);
 	}
 }

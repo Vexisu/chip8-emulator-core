@@ -11,7 +11,7 @@ public class TimerRegisters
 
 	public void write(byte location, short data)
 	{
-		this.data[location] = data;
+		this.data[location] = (short) (data & 0xFF);
 	}
 
 	public void tick()

@@ -11,16 +11,11 @@ public class ProgramCounterRegister
 
 	public void write(int data)
 	{
-		this.data = data;
+		this.data = data & 0xFFFF;
 	}
 
 	public void increment(int value)
 	{
-		this.data += value;
-	}
-
-	public void decrement(int value)
-	{
-		this.data -= value;
+		this.data = (this.data + value) & 0xFFFF;
 	}
 }

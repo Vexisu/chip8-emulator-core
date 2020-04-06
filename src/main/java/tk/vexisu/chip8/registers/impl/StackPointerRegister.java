@@ -11,16 +11,16 @@ public class StackPointerRegister
 
 	public void write(byte data)
 	{
-		this.data = data;
+		this.data = (byte) (data & 0xF);
 	}
 
 	public void increment(int value)
 	{
-		this.data += value;
+		this.data = (byte) ((this.data + value) & 0xF);
 	}
 
 	public void decrement(int value)
 	{
-		this.data -= value;
+		this.data = (byte) ((this.data - value) & 0xF);
 	}
 }

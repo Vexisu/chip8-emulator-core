@@ -2,7 +2,7 @@ package tk.vexisu.chip8.registers.impl;
 
 public class StackRegisters
 {
-	private int data[] = new int[16];
+	private int[] data = new int[16];
 
 	public int read(byte location)
 	{
@@ -11,6 +11,6 @@ public class StackRegisters
 
 	public void write(byte location, int data)
 	{
-		this.data[location] = data;
+		this.data[location] = data & 0xFFFF;
 	}
 }
