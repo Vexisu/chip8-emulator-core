@@ -200,4 +200,58 @@ public class InstructionsTest
 		this.logicInstructions.and(operator);
 		Assert.assertEquals((short) 0x10, this.registers.getGeneralPurposeRegisters().read((short) 0x7));
 	}
+
+	@Test
+	public void xorImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xB, (short) 0x40);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x1, (short) 0xB3);
+		Operator operator = new Operator(0x8B13);
+		this.logicInstructions.xor(operator);
+		Assert.assertEquals((short) 0xF3, this.registers.getGeneralPurposeRegisters().read((short) 0xB));
+	}
+
+	@Test
+	public void addvImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x45);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x4, (short) 0x2F);
+		Operator operator = new Operator(0x8344);
+		this.arithmeticInstructions.addv(operator);
+		Assert.assertEquals((short) 0x74, this.registers.getGeneralPurposeRegisters().read((short) 0x3));
+		Assert.assertEquals((short) 0x0, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
+
+	@Test
+	public void addvImplementationCheckWhenOverflowOccurs()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0xB4);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x4, (short) 0xDF);
+		Operator operator = new Operator(0x8344);
+		this.arithmeticInstructions.addv(operator);
+		Assert.assertEquals((short) 0x93, this.registers.getGeneralPurposeRegisters().read((short) 0x3));
+		Assert.assertEquals((short) 0x1, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
+
+	@Test
+	public void subImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0xB4);
+		this.registers.getGeneralPurposeRegisters().write((short) 0xD, (short) 0x1C);
+		Operator operator = new Operator(0x82D5);
+		this.arithmeticInstructions.sub(operator, false);
+		Assert.assertEquals((short) 0x98, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
+		Assert.assertEquals((short) 0x1, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
+
+	@Test
+	public void subImplementationCheckWhenOverflowOccurs()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0xB4);
+		this.registers.getGeneralPurposeRegisters().write((short) 0xD, (short) 0xB6);
+		Operator operator = new Operator(0x82D5);
+		this.arithmeticInstructions.sub(operator, false);
+		Assert.assertEquals((short) 0xFE, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
+		Assert.assertEquals((short) 0x0, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
 }
