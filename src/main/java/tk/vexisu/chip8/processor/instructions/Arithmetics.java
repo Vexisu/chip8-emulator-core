@@ -113,7 +113,7 @@ public class Arithmetics
 	{
 		var registerXAddress = operator.getFourBits(2);
 		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
-		if (~((~registerXValue) | ~(0b0)) == 0b1)
+		if ((registerXValue >> 7) == 0b1)
 		{
 			this.generalPurposeRegisters.write((short) 0xf, (short) 0x1);
 		}
