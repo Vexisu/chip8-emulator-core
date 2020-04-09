@@ -254,4 +254,24 @@ public class InstructionsTest
 		Assert.assertEquals((short) 0xFE, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
 		Assert.assertEquals((short) 0x0, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
 	}
+
+	@Test
+	public void shrImplementationCheckForOddValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x43);
+		Operator operator = new Operator(0x8206);
+		this.arithmeticInstructions.shr(operator);
+		Assert.assertEquals((short) 0x21, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
+		Assert.assertEquals((short) 0x1, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
+
+	@Test
+	public void shrImplementationCheckForEvenValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x44);
+		Operator operator = new Operator(0x8206);
+		this.arithmeticInstructions.shr(operator);
+		Assert.assertEquals((short) 0x22, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
+		Assert.assertEquals((short) 0x0, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
 }
