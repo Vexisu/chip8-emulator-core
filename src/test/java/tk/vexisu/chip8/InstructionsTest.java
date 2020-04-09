@@ -274,4 +274,26 @@ public class InstructionsTest
 		Assert.assertEquals((short) 0x22, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
 		Assert.assertEquals((short) 0x0, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
 	}
+
+	@Test
+	public void subnImplementationCheck()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x52);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x8, (short) 0x83);
+		Operator operator = new Operator(0x8387);
+		this.arithmeticInstructions.sub(operator, true);
+		Assert.assertEquals((short) 0x31, this.registers.getGeneralPurposeRegisters().read((short) 0x3));
+		Assert.assertEquals((short) 0x1, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
+
+	@Test
+	public void subnImplementationCheckWhenOverflowOccurs()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x20);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x8, (short) 0x1F);
+		Operator operator = new Operator(0x8387);
+		this.arithmeticInstructions.sub(operator, true);
+		Assert.assertEquals((short) 0xFF, this.registers.getGeneralPurposeRegisters().read((short) 0x3));
+		Assert.assertEquals((short) 0x0, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
+	}
 }
