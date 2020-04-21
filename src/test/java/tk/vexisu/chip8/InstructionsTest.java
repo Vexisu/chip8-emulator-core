@@ -316,4 +316,45 @@ public class InstructionsTest
 		Assert.assertEquals((short) 0x8C, this.registers.getGeneralPurposeRegisters().read((short) 0xD));
 		Assert.assertEquals((short) 0x1, this.registers.getGeneralPurposeRegisters().read((short) 0xF));
 	}
+
+	@Test
+	public void snevImplementationTestForNotEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x35);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x4, (short) 0xCD);
+		this.registers.getProgramCounterRegister().write(0x415);
+		Operator operator = new Operator(0x9340);
+		this.logicInstructions.snev(operator);
+		Assert.assertEquals(0x417, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void snevImplementationTestForEqualValue()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x3, (short) 0x35);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x4, (short) 0x35);
+		this.registers.getProgramCounterRegister().write(0x415);
+		Operator operator = new Operator(0x9340);
+		this.logicInstructions.snev(operator);
+		Assert.assertEquals(0x415, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void ldiImplementationTest()
+	{
+		this.registers.getIRegister().write(0x211);
+		Operator operator = new Operator(0xA5CF);
+		this.flowControlInstructions.ldi(operator);
+		Assert.assertEquals(0x5CF, this.registers.getIRegister().read());
+	}
+
+	@Test
+	public void jpvImplementationTest()
+	{
+		this.registers.getProgramCounterRegister().write(0x1C2);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x0, (short) 0x28);
+		Operator operator = new Operator(0xB412);
+		this.flowControlInstructions.jpv(operator);
+		Assert.assertEquals(0x43A, this.registers.getProgramCounterRegister().read());
+	}
 }
