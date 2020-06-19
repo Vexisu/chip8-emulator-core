@@ -30,20 +30,20 @@ public class InstructionsTest
 		this.display = new Display();
 		this.arithmeticInstructions = new Arithmetics(registers);
 		this.flowControlInstructions = new FlowControls(registers, memory);
-		this.graphicInstructions = new Graphics(registers, display);
+		this.graphicInstructions = new Graphics(registers, memory, display);
 		this.logicInstructions = new Logics(registers);
 	}
 
 	@Test
 	public void clsImplementationCheck()
 	{
-		this.display.set(1, 1, true);
+		this.display.write(1, 1, true);
 		this.graphicInstructions.cls();
 		for (int x = 0; x < 64; x++)
 		{
 			for (int y = 0; y < 32; y++)
 			{
-				if (this.display.get(x, y))
+				if (this.display.read(x, y))
 				{
 					Assert.fail("Found true value in array. All expected false.");
 				}
@@ -356,5 +356,22 @@ public class InstructionsTest
 		Operator operator = new Operator(0xB412);
 		this.flowControlInstructions.jpv(operator);
 		Assert.assertEquals(0x43A, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void drwImplementationTest()
+	{
+		this.display.clear();
+		this.memory.write((short) 0x100, (short) 0x3);
+		this.memory.write((short) 0x101, (short) 0x3);
+		this.registers.getIRegister().write(0x100);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x4, (short) 57);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x5, (short) 31);
+		Operator operator = new Operator(0xD452);
+		this.graphicInstructions.drw(operator);
+		Assert.assertEquals(this.display.read(0,0), true);
+		Assert.assertEquals(this.display.read(63,0), true);
+		Assert.assertEquals(this.display.read(63,31), true);
+		Assert.assertEquals(this.display.read(0,31), true);
 	}
 }

@@ -9,13 +9,13 @@ public class Display
 		data = new boolean[64][32];
 	}
 
-	public void set(int x, int y, boolean value)
+	public void write(int x, int y, boolean value)
 	{
-		this.data[x][y] = value;
+		this.data[x % 64][y % 32] = value;
 	}
 
-	public boolean get(int x, int y)
+	public boolean read(int x, int y)
 	{
-		return this.data[x][y];
+		return this.data[x % 64][y % 32];
 	}
 }

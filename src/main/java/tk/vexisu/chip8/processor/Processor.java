@@ -21,7 +21,7 @@ public class Processor
 	{
 		this.arithmetics = new Arithmetics(registers);
 		this.logics = new Logics(registers);
-		this.graphics = new Graphics(registers, display);
+		this.graphics = new Graphics(registers, memory, display);
 		this.flowControls = new FlowControls(registers, memory);
 	}
 

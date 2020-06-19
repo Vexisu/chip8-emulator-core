@@ -1,6 +1,7 @@
 package tk.vexisu.chip8.processor.instructions;
 
 import tk.vexisu.chip8.display.Display;
+import tk.vexisu.chip8.memory.Memory;
 import tk.vexisu.chip8.processor.opcode.Operator;
 import tk.vexisu.chip8.registers.Registers;
 import tk.vexisu.chip8.registers.impl.GeneralPurposeRegisters;
@@ -18,9 +19,10 @@ public class Graphics
 	private StackPointerRegister stackPointerRegister;
 	private StackRegisters stackRegisters;
 	private TimerRegisters timerRegisters;
+	private Memory memory;
 	private Display display;
 
-	public Graphics(Registers registers, Display display)
+	public Graphics(Registers registers, Memory memory, Display display)
 	{
 		this.generalPurposeRegisters = registers.getGeneralPurposeRegisters();
 		this.iRegister = registers.getIRegister();
@@ -28,6 +30,7 @@ public class Graphics
 		this.stackPointerRegister = registers.getStackPointerRegister();
 		this.stackRegisters = registers.getStackRegisters();
 		this.timerRegisters = registers.getTimerRegisters();
+		this.memory = memory;
 		this.display = display;
 	}
 
@@ -40,10 +43,29 @@ public class Graphics
 	{
 		var registerXAdress = operator.getFourBits(2);
 		var registerYAdress = operator.getFourBits(1);
-		var nibble = operator.getFourBits(0);
+		var length = operator.getFourBits(0);
 		var spriteAddress = this.iRegister.read();
 		var xCoordinate = this.generalPurposeRegisters.read(registerXAdress);
 		var yCoordinate = this.generalPurposeRegisters.read(registerYAdress);
-		//Drawing will be implemented after implementing Display
+		var sprites = new short[length];
+		for (int i = 0; i < length; i++)
+		{
+			sprites[i] = this.memory.read((short) (spriteAddress + i));
+		}
+		for (int i = 0; i < length; i++)
+		{
+			var bitYCoordinate = yCoordinate + i;
+			for (int byteOfSprite = 0; byteOfSprite < 8; byteOfSprite++)
+			{
+				var separatedBitOfSprite = ((sprites[i] >> (7 - byteOfSprite)) & 0b1) > 0;
+				var bitXCoordinate = xCoordinate + byteOfSprite;
+				var xoredBit = display.read(bitXCoordinate, bitYCoordinate) ^ separatedBitOfSprite;
+				this.display.write(bitXCoordinate, bitYCoordinate, xoredBit);
+				if (separatedBitOfSprite && xoredBit)
+				{
+					this.generalPurposeRegisters.write((short) 0xF, (short) 0x1);
+				}
+			}
+		}
 	}
 }
