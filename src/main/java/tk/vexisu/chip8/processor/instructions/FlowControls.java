@@ -1,5 +1,7 @@
 package tk.vexisu.chip8.processor.instructions;
 
+import tk.vexisu.chip8.keyboard.Key;
+import tk.vexisu.chip8.keyboard.KeyboardAdapter;
 import tk.vexisu.chip8.memory.Memory;
 import tk.vexisu.chip8.processor.opcode.Operator;
 import tk.vexisu.chip8.registers.Registers;
@@ -19,8 +21,9 @@ public class FlowControls
 	private StackRegisters stackRegisters;
 	private TimerRegisters timerRegisters;
 	private Memory memory;
+	private KeyboardAdapter keyboardAdapter;
 
-	public FlowControls(Registers registers, Memory memory)
+	public FlowControls(Registers registers, Memory memory, KeyboardAdapter keyboardAdapter)
 	{
 		this.generalPurposeRegisters = registers.getGeneralPurposeRegisters();
 		this.iRegister = registers.getIRegister();
@@ -29,6 +32,7 @@ public class FlowControls
 		this.stackRegisters = registers.getStackRegisters();
 		this.timerRegisters = registers.getTimerRegisters();
 		this.memory = memory;
+		this.keyboardAdapter = keyboardAdapter;
 	}
 
 	public void ret()
@@ -95,12 +99,22 @@ public class FlowControls
 
 	public void skp(Operator operator)
 	{
-		var keyPressed = (int) operator.getFourBits(2);
+		var keyCode = (int) operator.getFourBits(2);
+		Key key = Key.getByCode(keyCode);
+		if (this.keyboardAdapter.isPressed(key))
+		{
+			this.programCounterRegister.increment(2);
+		}
 	}
 
 	public void sknp(Operator operator)
 	{
-		var keyPressed = (int) operator.getFourBits(2);
+		var keyCode = (int) operator.getFourBits(2);
+		Key key = Key.getByCode(keyCode);
+		if (!this.keyboardAdapter.isPressed(key))
+		{
+			this.programCounterRegister.increment(2);
+		}
 	}
 
 	public void ldvt(Operator operator)

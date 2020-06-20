@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import tk.vexisu.chip8.display.Display;
+import tk.vexisu.chip8.keyboard.KeyboardAdapter;
 import tk.vexisu.chip8.memory.Memory;
 import tk.vexisu.chip8.processor.instructions.Arithmetics;
 import tk.vexisu.chip8.processor.instructions.FlowControls;
@@ -17,19 +18,20 @@ public class InstructionsTest
 	private Registers registers;
 	private Memory memory;
 	private Display display;
+	private KeyboardAdapter keyboardAdapter;
 	private Arithmetics arithmeticInstructions;
 	private FlowControls flowControlInstructions;
 	private Graphics graphicInstructions;
 	private Logics logicInstructions;
 
 	@Before
-	public void initalizeRequiredVariables()
+	public void initializeRequiredVariables()
 	{
 		this.registers = new Registers();
 		this.memory = new Memory();
 		this.display = new Display();
 		this.arithmeticInstructions = new Arithmetics(registers);
-		this.flowControlInstructions = new FlowControls(registers, memory);
+		this.flowControlInstructions = new FlowControls(registers, memory, keyboardAdapter);
 		this.graphicInstructions = new Graphics(registers, memory, display);
 		this.logicInstructions = new Logics(registers);
 	}
