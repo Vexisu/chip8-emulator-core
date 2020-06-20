@@ -18,4 +18,9 @@ public class ProgramCounterRegister
 	{
 		this.data = (this.data + value) & 0xFFFF;
 	}
+
+	public void decrement(int value)
+	{
+		this.data = (this.data - value) & 0xFFFF;
+	}
 }

@@ -12,4 +12,10 @@ public class TestKeyboardAdapter implements KeyboardAdapter
 	{
 		return key.getKeyCode() == this.pressedKey;
 	}
+
+	@Override
+	public Key getPressed()
+	{
+		return Key.getByCode(pressedKey);
+	}
 }

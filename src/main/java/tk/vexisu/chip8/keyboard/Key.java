@@ -2,6 +2,7 @@ package tk.vexisu.chip8.keyboard;
 
 public enum Key
 {
+	NONE(-1),
 	KEY_0(0),
 	KEY_1(1),
 	KEY_2(2),

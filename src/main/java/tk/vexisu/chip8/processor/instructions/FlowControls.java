@@ -128,7 +128,14 @@ public class FlowControls
 
 	public void ldvk(Operator operator)
 	{
+		if (this.keyboardAdapter.isPressed(Key.NONE))
+		{
+			this.programCounterRegister.decrement(1);
+			return;
+		}
 		var registerXAddress = operator.getFourBits(2);
+		Key pressedKey = this.keyboardAdapter.getPressed();
+		this.generalPurposeRegisters.write(registerXAddress, (short) pressedKey.getKeyCode());
 	}
 
 	public void lddv(Operator operator)
@@ -155,11 +162,11 @@ public class FlowControls
 	public void ldbv(Operator operator)
 	{
 		var decimalValue = operator.getFourBits(2);
-		var hunderdsFromDecimal = (decimalValue / 100) % 10;
+		var hundredsFromDecimal = (decimalValue / 100) % 10;
 		var tensFromDecimal = (decimalValue / 10) % 10;
 		var onesFromDecimal = decimalValue % 10;
 		var iRegisterValue = this.iRegister.read();
-		this.memory.write((short) iRegisterValue, (short) hunderdsFromDecimal);
+		this.memory.write((short) iRegisterValue, (short) hundredsFromDecimal);
 		this.memory.write((short) (iRegisterValue + 0x1), (short) tensFromDecimal);
 		this.memory.write((short) (iRegisterValue + 0x2), (short) onesFromDecimal);
 	}
