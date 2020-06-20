@@ -99,8 +99,9 @@ public class FlowControls
 
 	public void skp(Operator operator)
 	{
-		var keyCode = (int) operator.getFourBits(2);
-		Key key = Key.getByCode(keyCode);
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		Key key = Key.getByCode(registerXValue);
 		if (this.keyboardAdapter.isPressed(key))
 		{
 			this.programCounterRegister.increment(2);
@@ -109,8 +110,9 @@ public class FlowControls
 
 	public void sknp(Operator operator)
 	{
-		var keyCode = (int) operator.getFourBits(2);
-		Key key = Key.getByCode(keyCode);
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		Key key = Key.getByCode(registerXValue);
 		if (!this.keyboardAdapter.isPressed(key))
 		{
 			this.programCounterRegister.increment(2);
