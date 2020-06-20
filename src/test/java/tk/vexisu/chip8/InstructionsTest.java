@@ -30,6 +30,7 @@ public class InstructionsTest
 		this.registers = new Registers();
 		this.memory = new Memory();
 		this.display = new Display();
+		this.keyboardAdapter = new TestKeyboardAdapter();
 		this.arithmeticInstructions = new Arithmetics(registers);
 		this.flowControlInstructions = new FlowControls(registers, memory, keyboardAdapter);
 		this.graphicInstructions = new Graphics(registers, memory, display);
@@ -371,9 +372,49 @@ public class InstructionsTest
 		this.registers.getGeneralPurposeRegisters().write((short) 0x5, (short) 31);
 		Operator operator = new Operator(0xD452);
 		this.graphicInstructions.drw(operator);
-		Assert.assertEquals(this.display.read(0,0), true);
-		Assert.assertEquals(this.display.read(63,0), true);
-		Assert.assertEquals(this.display.read(63,31), true);
-		Assert.assertEquals(this.display.read(0,31), true);
+		Assert.assertEquals(this.display.read(0, 0), true);
+		Assert.assertEquals(this.display.read(63, 0), true);
+		Assert.assertEquals(this.display.read(63, 31), true);
+		Assert.assertEquals(this.display.read(0, 31), true);
+	}
+
+	@Test
+	public void skpImplementationTestWhileKeyIsPressed()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xE, (short) 0x2);
+		this.registers.getProgramCounterRegister().write(0x2222);
+		Operator operator = new Operator(0xEE9E);
+		this.flowControlInstructions.skp(operator);
+		Assert.assertEquals(0x2224, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void skpImplementationTestWhileKeyIsNotPressed()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xE, (short) 0x3);
+		this.registers.getProgramCounterRegister().write(0x2222);
+		Operator operator = new Operator(0xEE9E);
+		this.flowControlInstructions.skp(operator);
+		Assert.assertEquals(0x2222, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void sknpImplementationTestWhileKeyIsPressed()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xE, (short) 0x2);
+		this.registers.getProgramCounterRegister().write(0x2222);
+		Operator operator = new Operator(0xEEA1);
+		this.flowControlInstructions.sknp(operator);
+		Assert.assertEquals(0x2222, this.registers.getProgramCounterRegister().read());
+	}
+
+	@Test
+	public void sknpImplementationTestWhileKeyIsNotPressed()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xE, (short) 0x3);
+		this.registers.getProgramCounterRegister().write(0x2222);
+		Operator operator = new Operator(0xEEA1);
+		this.flowControlInstructions.sknp(operator);
+		Assert.assertEquals(0x2224, this.registers.getProgramCounterRegister().read());
 	}
 }
