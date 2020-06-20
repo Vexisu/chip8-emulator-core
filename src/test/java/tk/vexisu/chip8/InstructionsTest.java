@@ -417,4 +417,14 @@ public class InstructionsTest
 		this.flowControlInstructions.sknp(operator);
 		Assert.assertEquals(0x2224, this.registers.getProgramCounterRegister().read());
 	}
+
+	@Test
+	public void ldvtImplementationTest()
+	{
+		this.registers.getTimerRegisters().write((byte) 0x0, (short) 0x0);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x4, (short) 0x73);
+		Operator operator = new Operator(0xF40A);
+		this.flowControlInstructions.ldvt(operator);
+		Assert.assertEquals((short) 0x73, this.registers.getTimerRegisters().read((byte) 0x0));
+	}
 }

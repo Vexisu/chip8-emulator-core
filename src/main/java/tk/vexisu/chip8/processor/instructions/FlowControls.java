@@ -121,8 +121,9 @@ public class FlowControls
 
 	public void ldvt(Operator operator)
 	{
-		var value = operator.getFourBits(2);
-		this.timerRegisters.write((byte) 0x0, value);
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		this.timerRegisters.write((byte) 0x0, registerXValue);
 	}
 
 	public void ldvk(Operator operator)
