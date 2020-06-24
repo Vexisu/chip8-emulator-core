@@ -3,6 +3,7 @@ package tk.vexisu.chip8.processor.instructions;
 import tk.vexisu.chip8.keyboard.Key;
 import tk.vexisu.chip8.keyboard.KeyboardAdapter;
 import tk.vexisu.chip8.memory.Memory;
+import tk.vexisu.chip8.processor.Processor;
 import tk.vexisu.chip8.processor.opcode.Operator;
 import tk.vexisu.chip8.registers.Registers;
 import tk.vexisu.chip8.registers.impl.GeneralPurposeRegisters;
@@ -14,6 +15,7 @@ import tk.vexisu.chip8.registers.impl.TimerRegisters;
 
 public class FlowControls
 {
+	private Processor processor;
 	private GeneralPurposeRegisters generalPurposeRegisters;
 	private IRegister iRegister;
 	private ProgramCounterRegister programCounterRegister;
@@ -23,8 +25,9 @@ public class FlowControls
 	private Memory memory;
 	private KeyboardAdapter keyboardAdapter;
 
-	public FlowControls(Registers registers, Memory memory, KeyboardAdapter keyboardAdapter)
+	public FlowControls(Processor processor, Registers registers, Memory memory, KeyboardAdapter keyboardAdapter)
 	{
+		this.processor = processor;
 		this.generalPurposeRegisters = registers.getGeneralPurposeRegisters();
 		this.iRegister = registers.getIRegister();
 		this.programCounterRegister = registers.getProgramCounterRegister();
@@ -130,9 +133,10 @@ public class FlowControls
 	{
 		if (this.keyboardAdapter.isPressed(Key.NONE))
 		{
-			this.programCounterRegister.decrement(1);
+			this.processor.setLock(true);
 			return;
 		}
+		this.processor.setLock(false);
 		var registerXAddress = operator.getFourBits(2);
 		Key pressedKey = this.keyboardAdapter.getPressed();
 		this.generalPurposeRegisters.write(registerXAddress, (short) pressedKey.getKeyCode());

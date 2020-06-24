@@ -18,12 +18,14 @@ public class Processor
 	private Graphics graphics;
 	private FlowControls flowControls;
 
+	private boolean lock;
+
 	public Processor(Registers registers, Memory memory, Display display, KeyboardAdapter keyboardAdapter)
 	{
 		this.arithmetics = new Arithmetics(registers);
 		this.logics = new Logics(registers);
 		this.graphics = new Graphics(registers, memory, display);
-		this.flowControls = new FlowControls(registers, memory, keyboardAdapter);
+		this.flowControls = new FlowControls(this, registers, memory, keyboardAdapter);
 	}
 
 	public void processInstruction(Operator operator)
@@ -121,5 +123,15 @@ public class Processor
 				this.arithmetics.addi(operator);
 				break;
 		}
+	}
+
+	public boolean isLocked()
+	{
+		return lock;
+	}
+
+	public void setLock(boolean lock)
+	{
+		this.lock = lock;
 	}
 }

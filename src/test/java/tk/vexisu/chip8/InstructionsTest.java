@@ -4,8 +4,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import tk.vexisu.chip8.display.Display;
-import tk.vexisu.chip8.keyboard.KeyboardAdapter;
+import tk.vexisu.chip8.keyboard.Key;
 import tk.vexisu.chip8.memory.Memory;
+import tk.vexisu.chip8.processor.Processor;
 import tk.vexisu.chip8.processor.instructions.Arithmetics;
 import tk.vexisu.chip8.processor.instructions.FlowControls;
 import tk.vexisu.chip8.processor.instructions.Graphics;
@@ -15,10 +16,11 @@ import tk.vexisu.chip8.registers.Registers;
 
 public class InstructionsTest
 {
+	private Processor processor;
 	private Registers registers;
 	private Memory memory;
 	private Display display;
-	private KeyboardAdapter keyboardAdapter;
+	private TestKeyboardAdapter keyboardAdapter;
 	private Arithmetics arithmeticInstructions;
 	private FlowControls flowControlInstructions;
 	private Graphics graphicInstructions;
@@ -31,8 +33,9 @@ public class InstructionsTest
 		this.memory = new Memory();
 		this.display = new Display();
 		this.keyboardAdapter = new TestKeyboardAdapter();
+		this.processor = new Processor(registers, memory, display, keyboardAdapter);
 		this.arithmeticInstructions = new Arithmetics(registers);
-		this.flowControlInstructions = new FlowControls(registers, memory, keyboardAdapter);
+		this.flowControlInstructions = new FlowControls(processor, registers, memory, keyboardAdapter);
 		this.graphicInstructions = new Graphics(registers, memory, display);
 		this.logicInstructions = new Logics(registers);
 	}
@@ -372,10 +375,10 @@ public class InstructionsTest
 		this.registers.getGeneralPurposeRegisters().write((short) 0x5, (short) 31);
 		Operator operator = new Operator(0xD452);
 		this.graphicInstructions.drw(operator);
-		Assert.assertEquals(this.display.read(0, 0), true);
-		Assert.assertEquals(this.display.read(63, 0), true);
-		Assert.assertEquals(this.display.read(63, 31), true);
-		Assert.assertEquals(this.display.read(0, 31), true);
+		Assert.assertTrue(this.display.read(0, 0));
+		Assert.assertTrue(this.display.read(63, 0));
+		Assert.assertTrue(this.display.read(63, 31));
+		Assert.assertTrue(this.display.read(0, 31));
 	}
 
 	@Test
@@ -426,5 +429,27 @@ public class InstructionsTest
 		Operator operator = new Operator(0xF40A);
 		this.flowControlInstructions.ldvt(operator);
 		Assert.assertEquals((short) 0x73, this.registers.getTimerRegisters().read((byte) 0x0));
+	}
+
+	@Test
+	public void ldvkImplementationTestWhileKeyIsPressed()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x8, (short) 0x0);
+		Operator operator = new Operator(0xF80A);
+		this.flowControlInstructions.ldvk(operator);
+		Assert.assertEquals(2, this.registers.getGeneralPurposeRegisters().read((short) 0x8));
+		Assert.assertFalse(this.processor.isLocked());
+	}
+
+	@Test
+	public void ldvkImplementationTestWhileKeyIsNotPressed()
+	{
+		this.keyboardAdapter.setPressedKey(Key.NONE.getKeyCode());
+		this.registers.getGeneralPurposeRegisters().write((short) 0x8, (short) 0x0);
+		Operator operator = new Operator(0xF80A);
+		this.flowControlInstructions.ldvk(operator);
+		Assert.assertEquals(0, this.registers.getGeneralPurposeRegisters().read((short) 0x8));
+		Assert.assertTrue(this.processor.isLocked());
+		this.keyboardAdapter.setPressedKey(Key.KEY_2.getKeyCode());
 	}
 }

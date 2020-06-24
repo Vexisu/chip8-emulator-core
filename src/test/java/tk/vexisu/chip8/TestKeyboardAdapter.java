@@ -5,7 +5,7 @@ import tk.vexisu.chip8.keyboard.KeyboardAdapter;
 
 public class TestKeyboardAdapter implements KeyboardAdapter
 {
-	int pressedKey = 2;
+	private int pressedKey = 2;
 
 	@Override
 	public boolean isPressed(Key key)
@@ -17,5 +17,10 @@ public class TestKeyboardAdapter implements KeyboardAdapter
 	public Key getPressed()
 	{
 		return Key.getByCode(pressedKey);
+	}
+
+	public void setPressedKey(int pressedKey)
+	{
+		this.pressedKey = pressedKey;
 	}
 }
