@@ -19,7 +19,6 @@ public enum Key
 	KEY_D(13),
 	KEY_E(14),
 	KEY_F(15);
-
 	private int keyCode;
 
 	Key(int keyCode)
@@ -27,19 +26,20 @@ public enum Key
 		this.keyCode = keyCode;
 	}
 
-	public int getKeyCode()
-	{
-		return keyCode;
-	}
-
 	public static Key getByCode(int keyCode)
 	{
 		for (Key key : values())
 		{
-			if (key.getKeyCode() == keyCode){
+			if (key.getKeyCode() == keyCode)
+			{
 				return key;
 			}
 		}
 		return null;
+	}
+
+	public int getKeyCode()
+	{
+		return keyCode;
 	}
 }

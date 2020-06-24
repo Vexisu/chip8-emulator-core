@@ -17,7 +17,6 @@ public class Processor
 	private Logics logics;
 	private Graphics graphics;
 	private FlowControls flowControls;
-
 	private boolean lock;
 
 	public Processor(Registers registers, Memory memory, Display display, KeyboardAdapter keyboardAdapter)
