@@ -452,4 +452,14 @@ public class InstructionsTest
 		Assert.assertTrue(this.processor.isLocked());
 		this.keyboardAdapter.setPressedKey(Key.KEY_2.getKeyCode());
 	}
+
+	@Test
+	public void lddvImplementationTest()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0xA, (short) 0xC3);
+		this.registers.getTimerRegisters().write((byte) 0x0, (short) 0xAA);
+		Operator operator = new Operator(0xFA15);
+		this.flowControlInstructions.lddv(operator);
+		Assert.assertEquals(0xC3, this.registers.getTimerRegisters().read((byte) 0x0));
+	}
 }
