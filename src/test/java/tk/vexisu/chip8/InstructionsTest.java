@@ -492,4 +492,16 @@ public class InstructionsTest
 		this.flowControlInstructions.ldfv(operator);
 		Assert.assertEquals(0x14, this.registers.getIRegister().read());
 	}
+
+	@Test
+	public void ldbvImplementationTest()
+	{
+		this.registers.getIRegister().write(0x38);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x1, (short) 0xC3);
+		Operator operator = new Operator(0xF133);
+		this.flowControlInstructions.ldbv(operator);
+		Assert.assertEquals(0x1, this.memory.read((short) 0x38));
+		Assert.assertEquals(0x9, this.memory.read((short) 0x39));
+		Assert.assertEquals(0x5, this.memory.read((short) 0x3A));
+	}
 }

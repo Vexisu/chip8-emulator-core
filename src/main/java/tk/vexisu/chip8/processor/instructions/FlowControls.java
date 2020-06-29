@@ -166,10 +166,11 @@ public class FlowControls
 
 	public void ldbv(Operator operator)
 	{
-		var decimalValue = operator.getFourBits(2);
-		var hundredsFromDecimal = (decimalValue / 100) % 10;
-		var tensFromDecimal = (decimalValue / 10) % 10;
-		var onesFromDecimal = decimalValue % 10;
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var hundredsFromDecimal = (registerXValue / 100) % 10;
+		var tensFromDecimal = (registerXValue / 10) % 10;
+		var onesFromDecimal = registerXValue % 10;
 		var iRegisterValue = this.iRegister.read();
 		this.memory.write((short) iRegisterValue, (short) hundredsFromDecimal);
 		this.memory.write((short) (iRegisterValue + 0x1), (short) tensFromDecimal);
