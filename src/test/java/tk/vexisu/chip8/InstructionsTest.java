@@ -462,4 +462,34 @@ public class InstructionsTest
 		this.flowControlInstructions.lddv(operator);
 		Assert.assertEquals(0xC3, this.registers.getTimerRegisters().read((byte) 0x0));
 	}
+
+	@Test
+	public void ldsvImplementationTest()
+	{
+		this.registers.getGeneralPurposeRegisters().write((short) 0x9, (short) 0xBB);
+		this.registers.getTimerRegisters().write((byte) 0x1, (short) 0x14);
+		Operator operator = new Operator(0xF918);
+		this.flowControlInstructions.ldsv(operator);
+		Assert.assertEquals(0xBB, this.registers.getTimerRegisters().read((byte) 0x1));
+	}
+
+	@Test
+	public void addiImplementationTest()
+	{
+		this.registers.getIRegister().write(0xBB);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x7, (short) 0x32);
+		Operator operator = new Operator(0xF71E);
+		this.arithmeticInstructions.addi(operator);
+		Assert.assertEquals(0xED, this.registers.getIRegister().read());
+	}
+
+	@Test
+	public void ldfvImplementationTest()
+	{
+		this.registers.getIRegister().write(0x322);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x4);
+		Operator operator = new Operator(0xF229);
+		this.flowControlInstructions.ldfv(operator);
+		Assert.assertEquals(0x14, this.registers.getIRegister().read());
+	}
 }

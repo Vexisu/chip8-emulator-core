@@ -158,8 +158,9 @@ public class FlowControls
 
 	public void ldfv(Operator operator)
 	{
-		var fontValue = operator.getFourBits(2);
-		var fontAddress = fontValue * 5;
+		var registerXAddress = operator.getFourBits(2);
+		var registerXValue = this.generalPurposeRegisters.read(registerXAddress);
+		var fontAddress = registerXValue * 5;
 		this.iRegister.write(fontAddress);
 	}
 
