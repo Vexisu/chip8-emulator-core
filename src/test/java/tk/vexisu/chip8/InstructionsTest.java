@@ -460,7 +460,7 @@ public class InstructionsTest
 		this.registers.getTimerRegisters().write((byte) 0x0, (short) 0xAA);
 		Operator operator = new Operator(0xFA15);
 		this.flowControlInstructions.lddv(operator);
-		Assert.assertEquals(0xC3, this.registers.getTimerRegisters().read((byte) 0x0));
+		Assert.assertEquals((short) 0xC3, this.registers.getTimerRegisters().read((byte) 0x0));
 	}
 
 	@Test
@@ -470,7 +470,7 @@ public class InstructionsTest
 		this.registers.getTimerRegisters().write((byte) 0x1, (short) 0x14);
 		Operator operator = new Operator(0xF918);
 		this.flowControlInstructions.ldsv(operator);
-		Assert.assertEquals(0xBB, this.registers.getTimerRegisters().read((byte) 0x1));
+		Assert.assertEquals((short) 0xBB, this.registers.getTimerRegisters().read((byte) 0x1));
 	}
 
 	@Test
@@ -480,7 +480,7 @@ public class InstructionsTest
 		this.registers.getGeneralPurposeRegisters().write((short) 0x7, (short) 0x32);
 		Operator operator = new Operator(0xF71E);
 		this.arithmeticInstructions.addi(operator);
-		Assert.assertEquals(0xED, this.registers.getIRegister().read());
+		Assert.assertEquals((short) 0xED, this.registers.getIRegister().read());
 	}
 
 	@Test
@@ -490,7 +490,7 @@ public class InstructionsTest
 		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x4);
 		Operator operator = new Operator(0xF229);
 		this.flowControlInstructions.ldfv(operator);
-		Assert.assertEquals(0x14, this.registers.getIRegister().read());
+		Assert.assertEquals((short) 0x14, this.registers.getIRegister().read());
 	}
 
 	@Test
@@ -500,8 +500,42 @@ public class InstructionsTest
 		this.registers.getGeneralPurposeRegisters().write((short) 0x1, (short) 0xC3);
 		Operator operator = new Operator(0xF133);
 		this.flowControlInstructions.ldbv(operator);
-		Assert.assertEquals(0x1, this.memory.read((short) 0x38));
-		Assert.assertEquals(0x9, this.memory.read((short) 0x39));
-		Assert.assertEquals(0x5, this.memory.read((short) 0x3A));
+		Assert.assertEquals((short) 0x1, this.memory.read((short) 0x38));
+		Assert.assertEquals((short) 0x9, this.memory.read((short) 0x39));
+		Assert.assertEquals((short) 0x5, this.memory.read((short) 0x3A));
+	}
+
+	@Test
+	public void ldivImplementationTest()
+	{
+		this.registers.getIRegister().write(0x11);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x0, (short) 0x1);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x1, (short) 0x2);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x3);
+		this.memory.write((short) 0x11, (short) 0x0);
+		this.memory.write((short) 0x12, (short) 0x0);
+		this.memory.write((short) 0x12, (short) 0x0);
+		Operator operator = new Operator(0xF155);
+		this.flowControlInstructions.ldiv(operator);
+		Assert.assertEquals((short) 0x1, this.memory.read((short) 0x11));
+		Assert.assertEquals((short) 0x2, this.memory.read((short) 0x12));
+		Assert.assertEquals((short) 0x0, this.memory.read((short) 0x13));
+	}
+
+	@Test
+	public void ldviImplementationTest()
+	{
+		this.registers.getIRegister().write(0x24);
+		this.memory.write((short) 0x24, (short) 0x3B);
+		this.memory.write((short) 0x25, (short) 0xC4);
+		this.memory.write((short) 0x26, (short) 0x44);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x0, (short) 0x0);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x1, (short) 0x0);
+		this.registers.getGeneralPurposeRegisters().write((short) 0x2, (short) 0x0);
+		Operator operator = new Operator(0xF165);
+		this.flowControlInstructions.ldvi(operator);
+		Assert.assertEquals((short) 0x3B, this.registers.getGeneralPurposeRegisters().read((short) 0x0));
+		Assert.assertEquals((short) 0xC4, this.registers.getGeneralPurposeRegisters().read((short) 0x1));
+		Assert.assertEquals((short) 0x0, this.registers.getGeneralPurposeRegisters().read((short) 0x2));
 	}
 }
