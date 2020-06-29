@@ -17,10 +17,12 @@ public class Processor
 	private Logics logics;
 	private Graphics graphics;
 	private FlowControls flowControls;
+	private Registers registers;
 	private boolean lock;
 
 	public Processor(Registers registers, Memory memory, Display display, KeyboardAdapter keyboardAdapter)
 	{
+		this.registers = registers;
 		this.arithmetics = new Arithmetics(registers);
 		this.logics = new Logics(registers);
 		this.graphics = new Graphics(registers, memory, display);
@@ -120,6 +122,18 @@ public class Processor
 				break;
 			case ADDI:
 				this.arithmetics.addi(operator);
+				break;
+			case LDFV:
+				this.flowControls.ldfv(operator);
+				break;
+			case LDBV:
+				this.flowControls.ldbv(operator);
+				break;
+			case LDIV:
+				this.flowControls.ldiv(operator);
+				break;
+			case LDVI:
+				this.flowControls.ldvi(operator);
 				break;
 		}
 	}
