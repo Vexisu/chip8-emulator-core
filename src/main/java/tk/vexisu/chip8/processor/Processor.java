@@ -13,16 +13,18 @@ import tk.vexisu.chip8.registers.Registers;
 
 public class Processor
 {
+	private Registers registers;
+	private Memory memory;
 	private Arithmetics arithmetics;
 	private Logics logics;
 	private Graphics graphics;
 	private FlowControls flowControls;
-	private Registers registers;
 	private boolean lock;
 
 	public Processor(Registers registers, Memory memory, Display display, KeyboardAdapter keyboardAdapter)
 	{
 		this.registers = registers;
+		this.memory = memory;
 		this.arithmetics = new Arithmetics(registers);
 		this.logics = new Logics(registers);
 		this.graphics = new Graphics(registers, memory, display);
@@ -136,6 +138,21 @@ public class Processor
 				this.flowControls.ldvi(operator);
 				break;
 		}
+	}
+
+	public void tick()
+	{
+		var programCounter = this.registers.getProgramCounterRegister().read();
+		var instruction = this.memory.read((short) programCounter) << 4;
+		instruction += this.memory.read((short) (programCounter + 1));
+		var operator = new Operator(instruction);
+		this.processInstruction(operator);
+		if (isLocked())
+		{
+			this.setLock(false);
+			return;
+		}
+		this.registers.getProgramCounterRegister().increment(2);
 	}
 
 	public boolean isLocked()
