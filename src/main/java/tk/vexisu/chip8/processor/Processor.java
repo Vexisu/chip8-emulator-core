@@ -143,7 +143,7 @@ public class Processor
 	public void tick()
 	{
 		var programCounter = this.registers.getProgramCounterRegister().read();
-		var instruction = this.memory.read((short) programCounter) << 4;
+		var instruction = this.memory.read((short) programCounter) << 8;
 		instruction += this.memory.read((short) (programCounter + 1));
 		var operator = new Operator(instruction);
 		this.processInstruction(operator);
