@@ -27,24 +27,14 @@ public class Chip8Core
 		this.display = new Display();
 		this.clock = new Clock();
 		this.keyboardAdapter = new DummyKeyboardAdapter();
+		this.processor = new Processor(registers, memory, display, keyboardAdapter);
+		this.initialize();
 	}
 
-	public void initialize()
+	private void initialize()
 	{
 		this.loadSpritesToMemory();
-		this.processor = new Processor(registers, memory, display, keyboardAdapter);
 		this.clock.setProcessor(processor);
-	}
-
-	public void loadProgram(InputStream data) throws IOException
-	{
-		short address = 0x200;
-		int value;
-		while ((value = data.read()) != -1)
-		{
-			this.memory.write(address, (short) value);
-			address++;
-		}
 	}
 
 	private void loadSpritesToMemory()
@@ -57,6 +47,17 @@ public class Chip8Core
 				this.memory.write(address, value);
 				address++;
 			}
+		}
+	}
+
+	public void loadProgram(InputStream data, short programLocation) throws IOException
+	{
+		this.registers.getProgramCounterRegister().write(programLocation);
+		int value;
+		while ((value = data.read()) != -1)
+		{
+			this.memory.write(programLocation, (short) value);
+			programLocation++;
 		}
 	}
 
@@ -78,5 +79,10 @@ public class Chip8Core
 	public Display getDisplay()
 	{
 		return display;
+	}
+
+	public Clock getClock()
+	{
+		return clock;
 	}
 }
