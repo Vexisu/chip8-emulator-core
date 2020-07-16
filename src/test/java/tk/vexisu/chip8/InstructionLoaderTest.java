@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import tk.vexisu.chip8.memory.Memory;
+import tk.vexisu.chip8.memory.ProgramLocation;
 
 public class InstructionLoaderTest
 {
@@ -25,7 +26,7 @@ public class InstructionLoaderTest
 	{
 		byte[] array = {0x60, 0x0A};
 		InputStream inputStream = new ByteArrayInputStream(array);
-		this.chip8Core.loadProgram(inputStream);
+		this.chip8Core.loadProgram(inputStream, ProgramLocation.DEFAULT.value());
 		Assert.assertEquals(array[0], this.memory.read((short) 0x200));
 		Assert.assertEquals(array[1], this.memory.read((short) 0x201));
 	}
