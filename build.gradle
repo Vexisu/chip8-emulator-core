@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id "com.jfrog.bintray" version "1.8.5"
 }
 
 group 'tk.vexisu'
@@ -14,6 +15,18 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.13'
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    pkg {
+        repo = 'maven-public'
+        name = 'chip8-emulator-core'
+        userOrg = 'vexisu'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/Vexisu/chip8-emulator-core.git'
+    }
 }
 
 publishing {
