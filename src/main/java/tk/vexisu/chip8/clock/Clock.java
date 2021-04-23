@@ -56,12 +56,12 @@ public class Clock
 		public void run()
 		{
 			var cycleStartTimestamp = System.nanoTime();
-			this.clock.tick();
-			var tickEndTimestamp = System.nanoTime();
-			long tickDuration = tickEndTimestamp - cycleStartTimestamp;
-			long sleepDuration = this.frequencyBasedCycleDuration - tickDuration;
 			try
 			{
+				this.clock.tick();
+				var tickEndTimestamp = System.nanoTime();
+				long tickDuration = tickEndTimestamp - cycleStartTimestamp;
+				long sleepDuration = this.frequencyBasedCycleDuration - tickDuration;
 				TimeUnit.NANOSECONDS.sleep(sleepDuration > 0 ? sleepDuration : 1);
 			} catch (InterruptedException e)
 			{

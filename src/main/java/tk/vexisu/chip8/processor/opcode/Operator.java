@@ -11,7 +11,7 @@ public class Operator
 
 	public short getFourBits(int index)
 	{
-		return (short) ~((~(this.code >> 4 * index)) | ~(0xF));
+		return (short) ((this.code >> (4 * index)) & 0xF);
 	}
 
 	public int getCode()

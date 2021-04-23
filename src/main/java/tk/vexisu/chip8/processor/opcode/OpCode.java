@@ -48,34 +48,35 @@ public enum OpCode
 	{
 		for (OpCode opCode : OpCode.values())
 		{
-			var lastFourBitsOfOperator = op.getCode() >> 12;
-			if (lastFourBitsOfOperator == 0x0)
+			var operatorLastFourBits = (op.getCode() >> 12) & 0xF;
+			var opCodeLastFourBits = (opCode.code >> 12) &0xF;
+			if (operatorLastFourBits == 0x8 && opCodeLastFourBits == 0x8)
 			{
-				if (~((~op.getCode()) | ~(0xFF)) == ~((~opCode.code) | ~(0xFF)))
+				if ((op.getCode() & 0xF) == (opCode.code & 0xF))
 				{
 					return opCode;
 				}
 				continue;
 			}
-			if (lastFourBitsOfOperator == 0x8)
+			if (operatorLastFourBits == 0x0 && opCodeLastFourBits == 0x0)
 			{
-				if (~((~op.getCode()) | ~(0xF)) == ~((~opCode.code) | ~(0xF)))
+				if ((op.getCode() & 0xFF) == (opCode.code & 0xFF))
 				{
 					return opCode;
 				}
 				continue;
 			}
-			if (lastFourBitsOfOperator == 0xF)
+			if (operatorLastFourBits == 0xF && opCodeLastFourBits == 0xF)
 			{
-				if (~((~op.getCode()) | ~(0xFF)) == ~((~opCode.code) | ~(0xFF)))
+				if ((op.getCode() & 0xFF) == (opCode.code & 0xFF))
 				{
 					return opCode;
 				}
 				continue;
 			}
-			if (lastFourBitsOfOperator == 0xE)
+			if (operatorLastFourBits == 0xE && opCodeLastFourBits == 0xE)
 			{
-				if (~((~op.getCode()) | ~(0xFF)) == ~((~opCode.code) | ~(0xFF)))
+				if ((op.getCode() & 0xFF) == (opCode.code & 0xFF))
 				{
 					return opCode;
 				}
@@ -86,6 +87,6 @@ public enum OpCode
 				return opCode;
 			}
 		}
-		return null;
+		return SYS;
 	}
 }
